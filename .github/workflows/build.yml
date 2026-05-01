@@ -18,10 +18,15 @@ jobs:
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '10.0.x'
-          workloads: maui-android
 
-      - name: Restore solution
-        run: dotnet restore RentalApp.sln
+      - name: Restore database project
+        run: dotnet restore RentalApp.Database/RentalApp.Database.csproj
 
-      - name: Build solution
-        run: dotnet build RentalApp.sln -c Debug --no-restore
+      - name: Restore migrations project
+        run: dotnet restore RentalApp.Migrations/RentalApp.Migrations.csproj
+
+      - name: Build database project
+        run: dotnet build RentalApp.Database/RentalApp.Database.csproj -c Debug --no-restore
+
+      - name: Build migrations project
+        run: dotnet build RentalApp.Migrations/RentalApp.Migrations.csproj -c Debug --no-restore
