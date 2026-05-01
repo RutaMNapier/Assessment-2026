@@ -1,0 +1,32 @@
+name: .NET CI
+
+on:
+  push:
+    branches: [ main, "restructure/rentalApp" ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore
+        run: dotnet restore RentalApp.sln
+
+      - name: Build database project
+        run: dotnet build RentalApp.Database/RentalApp.Database.csproj -c Debug --no-restore
+
+      - name: Build migrations project
+        run: dotnet build RentalApp.Migrations/RentalApp.Migrations.csproj -c Debug --no-restore
