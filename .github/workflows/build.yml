@@ -2,7 +2,7 @@ name: RentalApp CI
 
 on:
   push:
-    branches: [ main, "restructure/rentalApp" ]
+    branches: [ "**" ]
   pull_request:
     branches: [ main ]
 
