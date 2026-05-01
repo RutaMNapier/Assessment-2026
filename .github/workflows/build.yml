@@ -1,0 +1,27 @@
+name: RentalApp CI
+
+on:
+  push:
+    branches: [ main, "restructure/rentalApp" ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+          workloads: maui-android
+
+      - name: Restore solution
+        run: dotnet restore RentalApp.sln
+
+      - name: Build solution
+        run: dotnet build RentalApp.sln -c Debug --no-restore
