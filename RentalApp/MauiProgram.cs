@@ -21,7 +21,6 @@ public static class MauiProgram
             });
 
         // Switch between local db and shared API
-
         bool useSharedApi = false;
         
         if (useSharedApi)
