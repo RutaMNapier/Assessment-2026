@@ -1,4 +1,4 @@
-namespace RentalApp.Services;
+namespace RentalApp.Database.Models;
 
 public class AuthToken
 {

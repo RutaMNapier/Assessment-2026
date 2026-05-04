@@ -68,5 +68,14 @@
 	<ItemGroup>
 	  <ProjectReference Include="../RentalApp.Database/RentalApp.Database.csproj" />
 	</ItemGroup>
+	
+	<ItemGroup>
+    	<MauiXaml Update="Views\ItemsListPage.xaml" />
+        <MauiXaml Update="Views\ItemDetailPage.xaml" />
+        <MauiXaml Update="Views\CreateItemPage.xaml" />
+        <MauiXaml Update="Views\RentalsPage.xaml" />
+        <MauiXaml Update="Views\ReviewsPage.xaml" />
+        <MauiXaml Update="Views\NearbyItemsPage.xaml" />
+	</ItemGroup>
 
 </Project>
