@@ -4,48 +4,105 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     Title="Browse Items">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="+ Add" Command="{Binding GoToCreateCommand}" />
+    </ContentPage.ToolbarItems>
+
     <Grid RowDefinitions="Auto,Auto,*">
+
+        <!-- Search Bar -->
         <SearchBar
             Grid.Row="0"
             Placeholder="Search items..."
             Text="{Binding SearchText}"
-            SearchCommand="{Binding LoadItemsCommand}" />
+            SearchCommand="{Binding LoadItemsCommand}"
+            Margin="10,5" />
+
+        <!-- Loading Indicator -->
         <ActivityIndicator
             Grid.Row="1"
             IsRunning="{Binding IsBusy}"
-            IsVisible="{Binding IsBusy}" />
-        <Label
-            Grid.Row="1"
-            Text="{Binding ErrorMessage}"
-            IsVisible="{Binding ErrorMessage, Converter={StaticResource StringToBoolConverter}}"
-            TextColor="Red" />
+            IsVisible="{Binding IsBusy}"
+            Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+            HorizontalOptions="Center" />
 
+        <!-- Error Message -->
+        <Border Grid.Row="1"
+                BackgroundColor="{AppThemeBinding Light=#FFEBEE, Dark=#1B0000}"
+                Stroke="{AppThemeBinding Light=#F44336, Dark=#EF5350}"
+                StrokeThickness="1"
+                Padding="15"
+                Margin="10,5"
+                IsVisible="{Binding ErrorMessage, Converter={StaticResource StringToBoolConverter}}">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="8" />
+            </Border.StrokeShape>
+            <Label Text="{Binding ErrorMessage}"
+                   TextColor="{AppThemeBinding Light=#D32F2F, Dark=#EF5350}"
+                   FontSize="14" />
+        </Border>
+
+        <!-- Items List -->
         <CollectionView
             Grid.Row="2"
             ItemsSource="{Binding Items}"
             SelectionMode="Single"
             SelectionChangedCommand="{Binding GoToDetailCommand}"
             SelectionChangedCommandParameter="{Binding SelectedItem, Source={RelativeSource Self}}">
+
+            <!-- Empty State -->
+            <CollectionView.EmptyView>
+                <VerticalStackLayout Padding="20" VerticalOptions="Center">
+                    <Label FontSize="48"
+                           HorizontalOptions="Center" />
+                    <Label Text="No items found"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"
+                           Margin="0,10,0,5" />
+                    <Label Text="Tap + Add to list your first item"
+                           HorizontalOptions="Center"
+                           TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}" />
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Grid Padding="16,8" ColumnDefinitions="*,Auto">
-                        <VerticalStackLayout Grid.Column="0">
-                            <Label Text="{Binding Title}" FontSize="16" FontAttributes="Bold" />
-                            <Label Text="{Binding Category}" TextColor="Gray" />
-                            <Label Text="{Binding OwnerName}" TextColor="Gray" />
-                        </VerticalStackLayout>
-                        <Label
-                            Grid.Column="1"
-                            Text="{Binding DailyRate, StringFormat='£{0:F2}/day'}"
-                            FontAttributes="Bold"
-                            VerticalOptions="Center" />
-                    </Grid>
+                    <Border Margin="10,5"
+                            Padding="15"
+                            Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray700}}"
+                            StrokeThickness="1"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="8" />
+                        </Border.StrokeShape>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                <Label Text="{Binding Title}"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       LineBreakMode="TailTruncation" />
+                                <Label Text="{Binding Category}"
+                                       FontSize="13"
+                                       TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}" />
+                                <Label Text="{Binding OwnerName, StringFormat='by {0}'}"
+                                       FontSize="12"
+                                       TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray500}}" />
+                            </VerticalStackLayout>
+                            <Label Grid.Column="1"
+                                   Text="{Binding DailyRate, StringFormat='£{0:F2}/day'}"
+                                   FontAttributes="Bold"
+                                   FontSize="15"
+                                   TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                                   VerticalOptions="Center" />
+                        </Grid>
+                    </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
+
         </CollectionView>
 
     </Grid>
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="+ Add" Command="{Binding GoToCreateCommand}" />
-    </ContentPage.ToolbarItems>
+
 </ContentPage>

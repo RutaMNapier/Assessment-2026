@@ -1,14 +1,16 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using RentalApp.Database.Data.Repositories;
 using RentalApp.Database.Models;
+using RentalApp.Services;
+
+namespace RentalApp.ViewModels;
 
 public partial class RentalsViewModel : ObservableObject
 {
-    private readonly IRentalRepository _rentals;
+    private readonly IRentalService _rentalService;
 
-    public RentalsViewModel(IRentalRepository rentals) => _rentals = rentals;
+    public RentalsViewModel(IRentalService rentalService) => _rentalService = rentalService;
 
     [ObservableProperty] private ObservableCollection<Rental> incoming = [];
     [ObservableProperty] private ObservableCollection<Rental> outgoing = [];
@@ -23,8 +25,9 @@ public partial class RentalsViewModel : ObservableObject
         ErrorMessage = null;
         try
         {
-            var inc = await _rentals.GetIncomingAsync();
-            var out_ = await _rentals.GetOutgoingAsync();
+            // Business logic goes through service, not repository directly
+            var inc  = await _rentalService.GetIncomingRentalsAsync();
+            var out_ = await _rentalService.GetOutgoingRentalsAsync();
             Incoming = new ObservableCollection<Rental>(inc);
             Outgoing = new ObservableCollection<Rental>(out_);
         }

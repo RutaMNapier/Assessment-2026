@@ -12,9 +12,12 @@ public class NavigationService : INavigationService
         await Shell.Current.GoToAsync(route, parameters);
     }
 
-    public async Task NavigateBackAsync()
+   public async Task NavigateBackAsync()
     {
-        await Shell.Current.GoToAsync("..");
+        if (Shell.Current != null)
+            await Shell.Current.GoToAsync("..");
+        else
+            await Application.Current!.Windows[0].Page!.Navigation.PopAsync();
     }
 
     public async Task NavigateToRootAsync()

@@ -85,7 +85,11 @@ public partial class MainViewModel : BaseViewModel
         if (result)
         {
             await _authService.LogoutAsync();
-            await _navigationService.NavigateToAsync("LoginPage");
+            SecureStorage.Default.Remove("jwt_token");
+
+            var loginPage = IPlatformApplication.Current!.Services
+            .GetRequiredService<Views.LoginPage>();
+            Application.Current!.Windows[0].Page = new NavigationPage(loginPage);
         }
     }
 

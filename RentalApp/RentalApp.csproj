@@ -74,6 +74,7 @@
         <MauiXaml Update="Views\ItemDetailPage.xaml" />
         <MauiXaml Update="Views\CreateItemPage.xaml" />
         <MauiXaml Update="Views\RentalsPage.xaml" />
+		<MauiXaml Update="Views\RequestRentalPage.xaml" />
 	</ItemGroup>
 
 </Project>

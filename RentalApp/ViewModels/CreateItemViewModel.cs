@@ -1,10 +1,10 @@
+namespace RentalApp.ViewModels;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using RentalApp.Database.Data.Repositories;
 using RentalApp.Database.Models;
 using System.Collections.ObjectModel;
 using RentalApp.Services;
-using RentalApp.Views;
 
 [QueryProperty(nameof(ItemId), "id")]
 public partial class CreateItemViewModel : ObservableObject
@@ -18,11 +18,10 @@ public partial class CreateItemViewModel : ObservableObject
         _api   = api;
     }
 
-    [ObservableProperty] private int itemId;   // 0 = create, >0 = edit
+    [ObservableProperty] private int itemId;
     [ObservableProperty] private string title = string.Empty;
     [ObservableProperty] private string description = string.Empty;
     [ObservableProperty] private decimal dailyRate;
-    [ObservableProperty] private int selectedCategoryId;
     [ObservableProperty] private double latitude;
     [ObservableProperty] private double longitude;
     [ObservableProperty] private bool isAvailable = true;
@@ -30,25 +29,11 @@ public partial class CreateItemViewModel : ObservableObject
     [ObservableProperty] private bool isEditMode;
     [ObservableProperty] private string? errorMessage;
     [ObservableProperty] private ObservableCollection<Category> categories = [];
+    [ObservableProperty] private Category? selectedCategory;
 
     partial void OnItemIdChanged(int value)
     {
         IsEditMode = value > 0;
-        if (IsEditMode) LoadItemCommand.Execute(null);
-    }
-
-    [RelayCommand]
-    private async Task LoadItemAsync()
-    {
-        var item = await _items.GetByIdAsync(ItemId);
-        if (item is null) return;
-        Title              = item.Title;
-        Description        = item.Description;
-        DailyRate          = item.DailyRate;
-        SelectedCategoryId = item.CategoryId;
-        Latitude           = item.Latitude;
-        Longitude          = item.Longitude;
-        IsAvailable        = item.IsAvailable;
     }
 
     [RelayCommand]
@@ -59,13 +44,27 @@ public partial class CreateItemViewModel : ObservableObject
     }
 
     [RelayCommand]
+    private async Task LoadItemAsync()
+    {
+        var item = await _items.GetByIdAsync(ItemId);
+        if (item is null) return;
+        Title            = item.Title;
+        Description      = item.Description;
+        DailyRate        = item.DailyRate;
+        Latitude         = item.Latitude ?? 0;    
+        Longitude        = item.Longitude ?? 0;   
+        IsAvailable      = item.IsAvailable;
+        SelectedCategory = Categories.FirstOrDefault(c => c.Id == item.CategoryId);
+    }
+
+    [RelayCommand]
     private async Task SaveAsync()
     {
-        if (string.IsNullOrWhiteSpace(Title) || DailyRate <= 0)
-        {
-            ErrorMessage = "Title and a positive daily rate are required.";
-            return;
-        }
+        if (string.IsNullOrWhiteSpace(Title))
+{
+    ErrorMessage = "Title is required.";
+    return;
+}
 
         IsBusy = true;
         ErrorMessage = null;
@@ -79,6 +78,9 @@ public partial class CreateItemViewModel : ObservableObject
                     Title       = Title,
                     Description = Description,
                     DailyRate   = DailyRate,
+                    CategoryId  = SelectedCategory?.Id ?? 0,
+                    Latitude    = Latitude,
+                    Longitude   = Longitude,
                     IsAvailable = IsAvailable
                 });
             }
@@ -89,12 +91,12 @@ public partial class CreateItemViewModel : ObservableObject
                     Title       = Title,
                     Description = Description,
                     DailyRate   = DailyRate,
-                    CategoryId  = SelectedCategoryId,
+                    CategoryId  = SelectedCategory?.Id ?? 0,
                     Latitude    = Latitude,
                     Longitude   = Longitude
                 });
             }
-            await Shell.Current.GoToAsync("..");
+            await Shell.Current.GoToAsync("//BrowseItems");
         }
         catch (ApiException ex)
         {

@@ -45,7 +45,6 @@ public partial class LoginViewModel : BaseViewModel
     /// @details Sets the title to "Login"
     public LoginViewModel()
     {
-        // Default constructor for design time support
         Title = "Login";
     }
 
@@ -66,8 +65,7 @@ public partial class LoginViewModel : BaseViewModel
     [RelayCommand]
     private async Task LoginAsync()
     {
-        if (IsBusy)
-            return;
+        if (IsBusy) return;
 
         if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
         {
@@ -84,7 +82,10 @@ public partial class LoginViewModel : BaseViewModel
 
             if (result.IsSuccess)
             {
-                await _navigationService.NavigateToAsync("MainPage");
+                // switch root to Shell instead of navigating to MainPage
+                var shell = IPlatformApplication.Current!.Services
+                    .GetRequiredService<AppShell>();
+                Application.Current!.Windows[0].Page = shell;
             }
             else
             {
@@ -106,9 +107,19 @@ public partial class LoginViewModel : BaseViewModel
     /// @return A task representing the asynchronous navigation operation
     [RelayCommand]
     private async Task NavigateToRegisterAsync()
+{
+    if (Shell.Current == null)
+    {
+        // Before Shell loads, navigate via NavigationPage
+        var registerPage = IPlatformApplication.Current!.Services
+            .GetRequiredService<Views.RegisterPage>();
+        await Application.Current!.Windows[0].Page!.Navigation.PushAsync(registerPage);
+    }
+    else
     {
         await _navigationService.NavigateToAsync("RegisterPage");
     }
+}
 
     /// @brief Handles forgot password functionality
     /// @details Relay command that displays a placeholder message for forgot password
@@ -117,7 +128,6 @@ public partial class LoginViewModel : BaseViewModel
     [RelayCommand]
     private async Task ForgotPasswordAsync()
     {
-        // TODO: Implement forgot password functionality
         await Application.Current.MainPage.DisplayAlert("Info", "Forgot password functionality not implemented yet", "OK");
     }
 }

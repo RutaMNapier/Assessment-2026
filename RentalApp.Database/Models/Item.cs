@@ -10,11 +10,11 @@ public class Item
     public string Category { get; set; } = string.Empty;
     public int OwnerId { get; set; }
     public string OwnerName { get; set; } = string.Empty;
-    public double? OwnerRating { get; set; }      
-    public double Latitude { get; set; }
-    public double Longitude { get; set; }
+    public double? OwnerRating { get; set; }
+    public double? Latitude { get; set; }
+    public double? Longitude { get; set; }
     public bool IsAvailable { get; set; }
-    public double? AverageRating { get; set; }    
+    public double? AverageRating { get; set; }
     public string? ImageUrl { get; set; }
     public DateTime CreatedAt { get; set; }
 }

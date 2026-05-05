@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-    x:Class="RentalApp.Views.CreateItemPage"
+    x:Class="RentalApp.Views.RequestRentalPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    Title="List an Item">
+    Title="Request Rental">
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="15">
@@ -22,77 +22,80 @@
                        FontSize="14" />
             </Border>
 
-            <!-- Title -->
-            <Label Text="Title" FontAttributes="Bold" />
+            <!-- Item Info Card -->
+            <Border Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray700}}"
+                    StrokeThickness="1"
+                    Padding="20"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="12" />
+                </Border.StrokeShape>
+                <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
+                    <Label Text="{Binding ItemTitle}"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center" />
+                    <Label Text="{Binding DailyRate, StringFormat='£{0:F2} per day'}"
+                           FontSize="16"
+                           HorizontalOptions="Center"
+                           TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Date Selection -->
+            <Label Text="Start Date" FontAttributes="Bold" />
             <Border Stroke="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
                     StrokeThickness="1"
                     BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="8" />
                 </Border.StrokeShape>
-                <Entry Text="{Binding Title}"
-                       Placeholder="e.g. Electric Drill"
-                       Margin="10" />
+                <DatePicker Date="{Binding StartDate}"
+                            Format="dd MMM yyyy"
+                            Margin="10" />
             </Border>
 
-            <!-- Description -->
-            <Label Text="Description" FontAttributes="Bold" />
+            <Label Text="End Date" FontAttributes="Bold" />
             <Border Stroke="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
                     StrokeThickness="1"
                     BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="8" />
                 </Border.StrokeShape>
-                <Editor Text="{Binding Description}"
-                        Placeholder="Describe your item..."
-                        HeightRequest="100"
-                        Margin="10" />
+                <DatePicker Date="{Binding EndDate}"
+                            Format="dd MMM yyyy"
+                            Margin="10" />
             </Border>
 
-            <!-- Daily Rate -->
-            <Label Text="Daily Rate (£)" FontAttributes="Bold" />
-            <Border Stroke="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
+            <!-- Total Price -->
+            <Border Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray700}}"
                     StrokeThickness="1"
+                    Padding="20"
                     BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="8" />
                 </Border.StrokeShape>
-                <Entry Text="{Binding DailyRate}"
-                       Placeholder="0.00"
-                       Keyboard="Numeric"
-                       Margin="10" />
+                <Label Text="{Binding TotalPrice, StringFormat='Total: £{0:F2}'}"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
             </Border>
 
-            <!-- Category -->
-            <Label Text="Category" FontAttributes="Bold" />
-            <Border Stroke="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
-                    StrokeThickness="1"
-                    BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}">
-                <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="8" />
-                </Border.StrokeShape>
-                <Picker ItemsSource="{Binding Categories}"
-                        ItemDisplayBinding="{Binding Name}"
-                        SelectedItem="{Binding SelectedCategory}"
-                        Title="Select category"
-                        Margin="10" />
-            </Border>
-
-            <!-- Save Button -->
-            <Button Text="Save"
-                    Command="{Binding SaveCommand}"
+            <!-- Submit Button -->
+            <Button Text="Submit Request"
+                    Command="{Binding SubmitCommand}"
                     BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
                     TextColor="White"
                     HeightRequest="50"
                     CornerRadius="8"
-                    Margin="0,20,0,0"
+                    Margin="0,10,0,0"
                     IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}" />
 
             <!-- Loading Indicator -->
             <ActivityIndicator IsRunning="{Binding IsBusy}"
                                IsVisible="{Binding IsBusy}"
-                               Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
-                               Margin="0,10,0,0" />
+                               Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
 
         </VerticalStackLayout>
     </ScrollView>

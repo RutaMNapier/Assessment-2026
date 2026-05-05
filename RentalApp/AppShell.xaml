@@ -5,25 +5,18 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:views="clr-namespace:RentalApp.Views"
     Shell.FlyoutBehavior="Disabled">
-
     <TabBar>
-
+        <Tab Title="Dashboard">
+            <ShellContent Route="Dashboard" ContentTemplate="{DataTemplate views:MainPage}" />
+        </Tab>
         <Tab Title="Browse Items">
-            <ShellContent ContentTemplate="{DataTemplate views:ItemsListPage}" />
+            <ShellContent Route="BrowseItems" ContentTemplate="{DataTemplate views:ItemsListPage}" />
         </Tab>
-
         <Tab Title="List an Item">
-            <ShellContent ContentTemplate="{DataTemplate views:CreateItemPage}" />
+            <ShellContent Route="ListAnItem" ContentTemplate="{DataTemplate views:CreateItemPage}" />
         </Tab>
-
         <Tab Title="Rentals">
-            <ShellContent ContentTemplate="{DataTemplate views:RentalsPage}" />
+            <ShellContent Route="Rentals" ContentTemplate="{DataTemplate views:RentalsPage}" />
         </Tab>
-
-        <Tab Title="Dashbroard">
-            <ShellContent ContentTemplate="{DataTemplate views:MainPage}" />
-        </Tab>
-
     </TabBar>
-
 </Shell>

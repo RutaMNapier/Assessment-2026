@@ -46,6 +46,8 @@ public class ApiAuthenticationService : IAuthenticationService
             _httpClient.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", token!.Token);
 
+            await SecureStorage.Default.SetAsync("jwt_token", token!.Token);
+
             var meResponse = await _httpClient.GetAsync("users/me");
             var profile = await meResponse.Content.ReadFromJsonAsync<UserProfileResponse>();
 

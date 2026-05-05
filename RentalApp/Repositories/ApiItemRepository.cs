@@ -22,8 +22,8 @@ public class ApiItemRepository : IItemRepository
             Description = entity.Description,
             DailyRate   = entity.DailyRate,
             CategoryId  = entity.CategoryId,
-            Latitude    = entity.Latitude,
-            Longitude   = entity.Longitude
+            Latitude    = entity.Latitude ?? 0,
+            Longitude   = entity.Longitude ?? 0
         });
 
     public Task<Item> UpdateAsync(Item entity) =>

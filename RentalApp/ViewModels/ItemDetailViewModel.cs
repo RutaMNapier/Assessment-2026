@@ -38,6 +38,7 @@ public partial class ItemDetailViewModel : ObservableObject
             Item = await _items.GetByIdAsync(ItemId);
             var currentUser = await _api.GetCurrentUserAsync();
             IsOwner = Item?.OwnerId == currentUser?.Id;
+            EditItemCommand.NotifyCanExecuteChanged();
         }
         catch (ApiException ex)
         {
@@ -53,10 +54,15 @@ public partial class ItemDetailViewModel : ObservableObject
     private async Task RequestRentalAsync()
     {
         await Shell.Current.GoToAsync(
-            $"{nameof(CreateItemPage)}?itemId={ItemId}");
+            $"{nameof(RequestRentalPage)}?itemId={ItemId}" +
+            $"&itemTitle={Uri.EscapeDataString(Item?.Title ?? string.Empty)}" +
+            $"&dailyRate={Item?.DailyRate}");
     }
 
-    [RelayCommand(CanExecute = nameof(IsOwner))]
+    
+    private bool CanEditItem() => IsOwner;
+
+    [RelayCommand(CanExecute = nameof(CanEditItem))]
     private async Task EditItemAsync()
     {
         await Shell.Current.GoToAsync(
