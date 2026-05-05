@@ -4,7 +4,54 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     Title="Rentals">
-    <VerticalStackLayout>
-        <Label Text="Rentals" />
-    </VerticalStackLayout>
+
+    <Grid RowDefinitions="Auto,Auto,*">
+
+        <HorizontalStackLayout Grid.Row="0" HorizontalOptions="Center" Padding="8" Spacing="8">
+            <Button Text="Incoming" Command="{Binding ToggleViewCommand}" />
+            <Button Text="Outgoing" Command="{Binding ToggleViewCommand}" />
+        </HorizontalStackLayout>
+
+        <ActivityIndicator Grid.Row="1" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+
+        <CollectionView
+            Grid.Row="2"
+            ItemsSource="{Binding Incoming}"
+            IsVisible="{Binding ShowIncoming}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="16,8" ColumnDefinitions="*,Auto">
+                        <VerticalStackLayout>
+                            <Label Text="{Binding ItemTitle}" FontAttributes="Bold" />
+                            <Label Text="{Binding BorrowerName}" TextColor="Gray" />
+                            <Label Text="{Binding StartDate, StringFormat='{0:dd MMM yyyy}'}" TextColor="Gray" />
+                        </VerticalStackLayout>
+                        <Label Grid.Column="1" Text="{Binding Status}"
+                               VerticalOptions="Center" FontAttributes="Bold" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <CollectionView
+            Grid.Row="2"
+            ItemsSource="{Binding Outgoing}"
+            IsVisible="{Binding ShowIncoming, Converter={StaticResource InvertedBoolConverter}}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="16,8" ColumnDefinitions="*,Auto">
+                        <VerticalStackLayout>
+                            <Label Text="{Binding ItemTitle}" FontAttributes="Bold" />
+                            <Label Text="{Binding OwnerName}" TextColor="Gray" />
+                            <Label Text="{Binding StartDate, StringFormat='{0:dd MMM yyyy}'}" TextColor="Gray" />
+                        </VerticalStackLayout>
+                        <Label Grid.Column="1" Text="{Binding Status}"
+                               VerticalOptions="Center" FontAttributes="Bold" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    </Grid>
+
 </ContentPage>

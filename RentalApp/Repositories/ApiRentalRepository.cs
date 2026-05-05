@@ -1,3 +1,4 @@
+namespace RentalApp.Repositories; 
 using RentalApp.Database.Data.Repositories;
 using RentalApp.Database.Models;
 using RentalApp.Services;

@@ -6,6 +6,24 @@
     xmlns:views="clr-namespace:RentalApp.Views"
     Shell.FlyoutBehavior="Disabled">
 
-    <ShellContent ContentTemplate="{DataTemplate views:LoginPage}" />
+    <TabBar>
+
+        <Tab Title="Browse Items">
+            <ShellContent ContentTemplate="{DataTemplate views:ItemsListPage}" />
+        </Tab>
+
+        <Tab Title="List an Item">
+            <ShellContent ContentTemplate="{DataTemplate views:CreateItemPage}" />
+        </Tab>
+
+        <Tab Title="Rentals">
+            <ShellContent ContentTemplate="{DataTemplate views:RentalsPage}" />
+        </Tab>
+
+        <Tab Title="Dashbroard">
+            <ShellContent ContentTemplate="{DataTemplate views:MainPage}" />
+        </Tab>
+
+    </TabBar>
 
 </Shell>

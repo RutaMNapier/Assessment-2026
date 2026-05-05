@@ -3,10 +3,44 @@
     x:Class="RentalApp.Views.CreateItemPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    Title="Create Item">
+    Title="List an Item">
 
-    <VerticalStackLayout>
-        <Label Text="Create Item" />
-    </VerticalStackLayout>
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="12">
+
+            <Label Text="Title" />
+            <Entry Text="{Binding Title}" Placeholder="e.g. Electric Drill" />
+
+            <Label Text="Description" />
+            <Editor Text="{Binding Description}"
+                    Placeholder="Describe your item..."
+                    HeightRequest="100" />
+
+            <Label Text="Daily Rate (£)" />
+            <Entry Text="{Binding DailyRate}" Keyboard="Numeric" Placeholder="0.00" />
+
+            <Label Text="Category" />
+            <Picker
+                ItemsSource="{Binding Categories}"
+                ItemDisplayBinding="{Binding Name}"
+                SelectedItem="{Binding SelectedCategory}" />
+
+            <Label Text="Latitude" />
+            <Entry Text="{Binding Latitude}" Keyboard="Numeric" Placeholder="55.9533" />
+
+            <Label Text="Longitude" />
+            <Entry Text="{Binding Longitude}" Keyboard="Numeric" Placeholder="-3.1883" />
+
+            <Label
+                Text="{Binding ErrorMessage}"
+                TextColor="Red"
+                IsVisible="{Binding ErrorMessage, Converter={StaticResource StringToBoolConverter}}" />
+
+            <Button Text="Save" Command="{Binding SaveCommand}" />
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+
+        </VerticalStackLayout>
+    </ScrollView>
 
 </ContentPage>

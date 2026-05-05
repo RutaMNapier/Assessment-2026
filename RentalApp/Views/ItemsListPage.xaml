@@ -4,9 +4,48 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     Title="Browse Items">
+    <Grid RowDefinitions="Auto,Auto,*">
+        <SearchBar
+            Grid.Row="0"
+            Placeholder="Search items..."
+            Text="{Binding SearchText}"
+            SearchCommand="{Binding LoadItemsCommand}" />
+        <ActivityIndicator
+            Grid.Row="1"
+            IsRunning="{Binding IsBusy}"
+            IsVisible="{Binding IsBusy}" />
+        <Label
+            Grid.Row="1"
+            Text="{Binding ErrorMessage}"
+            IsVisible="{Binding ErrorMessage, Converter={StaticResource StringToBoolConverter}}"
+            TextColor="Red" />
 
-    <VerticalStackLayout>
-        <Label Text="Items List" />
-    </VerticalStackLayout>
+        <CollectionView
+            Grid.Row="2"
+            ItemsSource="{Binding Items}"
+            SelectionMode="Single"
+            SelectionChangedCommand="{Binding GoToDetailCommand}"
+            SelectionChangedCommandParameter="{Binding SelectedItem, Source={RelativeSource Self}}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="16,8" ColumnDefinitions="*,Auto">
+                        <VerticalStackLayout Grid.Column="0">
+                            <Label Text="{Binding Title}" FontSize="16" FontAttributes="Bold" />
+                            <Label Text="{Binding Category}" TextColor="Gray" />
+                            <Label Text="{Binding OwnerName}" TextColor="Gray" />
+                        </VerticalStackLayout>
+                        <Label
+                            Grid.Column="1"
+                            Text="{Binding DailyRate, StringFormat='£{0:F2}/day'}"
+                            FontAttributes="Bold"
+                            VerticalOptions="Center" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
 
+    </Grid>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="+ Add" Command="{Binding GoToCreateCommand}" />
+    </ContentPage.ToolbarItems>
 </ContentPage>

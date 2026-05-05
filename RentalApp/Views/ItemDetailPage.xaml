@@ -5,8 +5,34 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     Title="Item Detail">
 
-    <VerticalStackLayout>
-        <Label Text="Item Detail" />
-    </VerticalStackLayout>
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="12">
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+
+            <Label Text="{Binding Item.Title}" FontSize="24" FontAttributes="Bold" />
+            <Label Text="{Binding Item.Category}" TextColor="Gray" />
+            <Label Text="{Binding Item.Description}" />
+            <Label Text="{Binding Item.DailyRate, StringFormat='£{0:F2} per day'}"
+                   FontSize="18" FontAttributes="Bold" />
+            <Label Text="{Binding Item.OwnerName, StringFormat='Owner: {0}'}" />
+
+            <Button
+                Text="Request Rental"
+                Command="{Binding RequestRentalCommand}"
+                IsVisible="{Binding IsOwner, Converter={StaticResource InvertedBoolConverter}}" />
+
+            <Button
+                Text="Edit Item"
+                Command="{Binding EditItemCommand}"
+                IsVisible="{Binding IsOwner}" />
+
+            <Label
+                Text="{Binding ErrorMessage}"
+                TextColor="Red"
+                IsVisible="{Binding ErrorMessage, Converter={StaticResource StringToBoolConverter}}" />
+
+        </VerticalStackLayout>
+    </ScrollView>
 
 </ContentPage>
