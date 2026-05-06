@@ -1,15 +1,12 @@
 name: Build & Test Workflow
-
 on:
   push:
     branches: [ main, develop ]
   pull_request:
     branches: [ main ]
-
 jobs:
   build:
     runs-on: ubuntu-latest
-
     services:
       postgres:
         image: postgres:16
@@ -24,7 +21,6 @@ jobs:
           --health-retries 5
         ports:
           - 5432:5432
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -40,6 +36,9 @@ jobs:
       - name: Restore migrations project
         run: dotnet restore RentalApp.Migrations/RentalApp.Migrations.csproj
 
+      - name: Restore test project
+        run: dotnet restore RentalApp.Test/RentalApp.Test.csproj
+
       - name: Build database project
         env:
           ConnectionStrings__DevelopmentConnection: Host=localhost;Port=5432;Username=test_user;Password=test_password;Database=testdb;
@@ -49,3 +48,13 @@ jobs:
         env:
           ConnectionStrings__DevelopmentConnection: Host=localhost;Port=5432;Username=test_user;Password=test_password;Database=testdb;
         run: dotnet build RentalApp.Migrations/RentalApp.Migrations.csproj -c Debug --no-restore
+
+      - name: Build test project
+        env:
+          ConnectionStrings__DevelopmentConnection: Host=localhost;Port=5432;Username=test_user;Password=test_password;Database=testdb;
+        run: dotnet build RentalApp.Test/RentalApp.Test.csproj -c Debug --no-restore
+
+      - name: Run tests
+        env:
+          ConnectionStrings__DevelopmentConnection: Host=localhost;Port=5432;Username=test_user;Password=test_password;Database=testdb;
+        run: dotnet test RentalApp.Test/RentalApp.Test.csproj -c Debug --no-build --verbosity normal
