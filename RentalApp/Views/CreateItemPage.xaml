@@ -78,7 +78,7 @@
 
                 <Picker ItemsSource="{Binding Categories}"
                         ItemDisplayBinding="{Binding Name}"
-                        SelectedItem="{Binding SelectedCategory}"
+                        SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
                         Title="Select category"
                         Margin="10" />
             </Border>

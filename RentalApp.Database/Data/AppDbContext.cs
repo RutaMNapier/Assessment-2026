@@ -40,8 +40,7 @@ public class AppDbContext : DbContext
 
     public DbSet<Item> Items { get; set; }
     public DbSet<Rental> Rentals { get; set; }
-    public DbSet<Category> Categories{ get; set; }
-    public DbSet<Review> Reviews { get; set; }
+    public DbSet<Category> Categories { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

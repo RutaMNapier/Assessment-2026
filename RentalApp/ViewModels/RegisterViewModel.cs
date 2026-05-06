@@ -97,16 +97,14 @@ public partial class RegisterViewModel : BaseViewModel
             else
             {
                 // debug — shows exact API error
-                 await Application.Current!.Windows[0].Page!.DisplayAlert(
-        "API Error", $"Message: {result.Message}", "OK");
-    SetError(result.Message);
+                await Application.Current!.Windows[0].Page!.DisplayAlert("API Error", result.Message, "OK");
+                SetError(result.Message);
             }
         }
         catch (Exception ex)
         {
-            await Application.Current!.Windows[0].Page!.DisplayAlert(
-        "Exception", ex.GetType().Name + ": " + ex.Message, "OK");
-    SetError($"Registration failed: {ex.Message}");
+            await Application.Current!.Windows[0].Page!.DisplayAlert("Exception", ex.Message, "OK");
+            SetError($"Registration failed: {ex.Message}");
         }
         finally
         {
