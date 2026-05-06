@@ -91,17 +91,22 @@ public partial class RegisterViewModel : BaseViewModel
 
             if (result.IsSuccess)
             {
-                await Application.Current.MainPage.DisplayAlert("Success", "Registration successful! Please login.", "OK");
+                await Application.Current!.Windows[0].Page!.DisplayAlert("Success", "Registration successful! Please login.", "OK");
                 await _navigationService.NavigateBackAsync();
             }
             else
             {
-                SetError(result.Message);
+                // debug — shows exact API error
+                 await Application.Current!.Windows[0].Page!.DisplayAlert(
+        "API Error", $"Message: {result.Message}", "OK");
+    SetError(result.Message);
             }
         }
         catch (Exception ex)
         {
-            SetError($"Registration failed: {ex.Message}");
+            await Application.Current!.Windows[0].Page!.DisplayAlert(
+        "Exception", ex.GetType().Name + ": " + ex.Message, "OK");
+    SetError($"Registration failed: {ex.Message}");
         }
         finally
         {
@@ -153,9 +158,9 @@ public partial class RegisterViewModel : BaseViewModel
             return false;
         }
 
-        if (Password.Length < 6)
+        if (Password.Length < 8)
         {
-            SetError("Password must be at least 6 characters long");
+            SetError("Password must be at least 8 characters long");
             return false;
         }
 

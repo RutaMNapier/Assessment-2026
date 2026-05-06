@@ -4,23 +4,27 @@ using RentalApp.Database.Models;
 
 namespace RentalApp.Services;
 
+// API implementation of IAuthenticationService
+// communicates with the shared REST API for authentication
+// swappable with local AuthenticationService via MauiProgram.cs
 public class ApiAuthenticationService : IAuthenticationService
 {
     private readonly HttpClient _httpClient;
     private User? _currentUser;
     private readonly List<string> _currentUserRoles = new();
 
-    private DateTime _tokenExpiresAt; //Stores the expiry time of token returned by the API
+    // stores the expiry time of the JWT token returned by the API
+    private DateTime _tokenExpiresAt;
 
-    private bool IsTokenExpired() => DateTime.UtcNow >= _tokenExpiresAt; // Checks if the token has expired
+    // checks if the stored token has expired
+    private bool IsTokenExpired() => DateTime.UtcNow >= _tokenExpiresAt;
 
     public event EventHandler<bool>? AuthenticationStateChanged;
 
-    // User is authenticated if: user exists and the token has not expired
-    public bool IsAuthenticated =>
-     _currentUser != null && !IsTokenExpired();
+    // user is authenticated if: user exists and token has not expired
+    public bool IsAuthenticated => _currentUser != null && !IsTokenExpired();
 
-    // Prevents access if token is expired
+    // prevents access to user data if token is expired
     public User? CurrentUser => IsAuthenticated ? _currentUser : null;
     public List<string> CurrentUserRoles => _currentUserRoles;
 
@@ -29,6 +33,7 @@ public class ApiAuthenticationService : IAuthenticationService
         _httpClient = httpClient;
     }
 
+    // POST /auth/token authenticates user and stores JWT
     public async Task<AuthenticationResult> LoginAsync(string email, string password)
     {
         try
@@ -42,23 +47,29 @@ public class ApiAuthenticationService : IAuthenticationService
             }
 
             var token = await response.Content.ReadFromJsonAsync<TokenResponse>();
-            _tokenExpiresAt = token!.ExpiresAt; // Save token expiry from API response
+
+            // save token expiry for IsTokenExpired() check
+            _tokenExpiresAt = token!.ExpiresAt;
+
+            // set bearer token on all future requests
             _httpClient.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", token!.Token);
 
+            // persist token so app can resume session after restart
             await SecureStorage.Default.SetAsync("jwt_token", token!.Token);
 
+            // GET /users/me load current user profile
             var meResponse = await _httpClient.GetAsync("users/me");
             var profile = await meResponse.Content.ReadFromJsonAsync<UserProfileResponse>();
 
             _currentUser = new User
             {
-                Id = profile!.Id,
-                Email = profile.Email,
+                Id        = profile!.Id,
+                Email     = profile.Email,
                 FirstName = profile.FirstName,
-                LastName = profile.LastName,
+                LastName  = profile.LastName,
                 CreatedAt = profile.CreatedAt,
-                IsActive = true
+                IsActive  = true
             };
 
             AuthenticationStateChanged?.Invoke(this, true);
@@ -70,7 +81,9 @@ public class ApiAuthenticationService : IAuthenticationService
         }
     }
 
-    public async Task<AuthenticationResult> RegisterAsync(string firstName, string lastName, string email, string password)
+    // POST /auth/register creates new user account
+    public async Task<AuthenticationResult> RegisterAsync(
+        string firstName, string lastName, string email, string password)
     {
         try
         {
@@ -96,16 +109,18 @@ public class ApiAuthenticationService : IAuthenticationService
         }
     }
 
+    // clears all auth state and removes bearer token from http client
     public Task LogoutAsync()
     {
         _currentUser = null;
         _currentUserRoles.Clear();
-        _tokenExpiresAt = DateTime.MinValue; // Reset expiry on logout
+        _tokenExpiresAt = DateTime.MinValue;  // force IsTokenExpired() to return true
         _httpClient.DefaultRequestHeaders.Authorization = null;
         AuthenticationStateChanged?.Invoke(this, false);
         return Task.CompletedTask;
     }
 
+    // role checks, always false
     public bool HasRole(string roleName) =>
         _currentUserRoles.Contains(roleName, StringComparer.OrdinalIgnoreCase);
 
@@ -115,13 +130,12 @@ public class ApiAuthenticationService : IAuthenticationService
     public bool HasAllRoles(params string[] roleNames) =>
         roleNames.All(HasRole);
 
-    public Task<bool> ChangePasswordAsync(string currentPassword, string newPassword)
-    {
-        // Not supported by the shared API
-        return Task.FromResult(false);
-    }
+    // password change not supported 
+    public Task<bool> ChangePasswordAsync(string currentPassword, string newPassword) =>
+        Task.FromResult(false);
 
-    // --- API response DTOs ---
+
+    // private DTOs for deserialising API responses 
 
     private record TokenResponse(string Token, DateTime ExpiresAt, int UserId);
 

@@ -5,13 +5,13 @@ using RentalApp.Test.Fixtures;
 
 namespace RentalApp.Test.Repositories;
 
-// tests for ItemRepository using InMemory database
-// matches tutorial DatabaseFixture pattern
+// tests for the ItemRepository class using the in memory database
 public class ItemRepositoryTests : IClassFixture<DatabaseFixture>
 {
     private readonly DatabaseFixture _fixture;
     private readonly ItemRepository  _repository;
 
+    // gets the database fixture and creates a real repository to test
     public ItemRepositoryTests(DatabaseFixture fixture)
     {
         _fixture    = fixture;

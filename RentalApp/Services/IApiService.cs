@@ -2,21 +2,22 @@ using RentalApp.Database.Models;
 
 namespace RentalApp.Services;
 
+// defines all the actions the app can do with the API
 public interface IApiService
 {
-    // Auth
+    // Auth - login, register, get current user
     Task<AuthToken> LoginAsync(string email, string password);
     Task<User> RegisterAsync(string firstName, string lastName, string email, string password);
     Task<User> GetCurrentUserAsync();
 
-    // Items
+    // Items, browse, view, create, update listings
     Task<List<Item>> GetItemsAsync(string? category = null, string? search = null, int page = 1);
     Task<Item> GetItemAsync(int id);
     Task<Item> CreateItemAsync(CreateItemRequest request);
     Task<Item> UpdateItemAsync(int id, UpdateItemRequest request);
     Task<List<Category>> GetCategoriesAsync();
 
-    // Rentals
+    // Rentals - request, view, update rental status
     Task<Rental> RequestRentalAsync(int itemId, DateTime startDate, DateTime endDate);
     Task<List<Rental>> GetIncomingRentalsAsync(string? status = null);
     Task<List<Rental>> GetOutgoingRentalsAsync(string? status = null);

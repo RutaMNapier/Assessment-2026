@@ -22,7 +22,7 @@ public class ItemsListViewModelTests : IClassFixture<DatabaseFixture>
     [Fact]
     public async Task SearchAsync_ShouldReturnItems()
     {
-        // Arrange - mock set up in constructor
+        // Arrange
 
         // Act
         var items = await _repoMock.Object.SearchAsync(null, null, 1, 20);

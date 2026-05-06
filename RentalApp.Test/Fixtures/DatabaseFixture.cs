@@ -5,14 +5,14 @@ using RentalApp.Database.Models;
 
 namespace RentalApp.Test.Fixtures;
 
-// sets up in-memory database for tests
+// creates a fresh in-memory database for each test class
 public class DatabaseFixture : IDisposable
 {
     public AppDbContext Context { get; private set; }
 
     public DatabaseFixture()
     {
-        // unique name per instance prevents shared state between test classes
+        // use a unique name so each test class gets its own database
         var options = new DbContextOptionsBuilder<AppDbContext>()
             .UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options;
@@ -22,6 +22,7 @@ public class DatabaseFixture : IDisposable
         SeedTestData();
     }
 
+    // adds test data so tests have something to work with
     private void SeedTestData()
     {
         var categories = new List<Category>
@@ -52,6 +53,7 @@ public class DatabaseFixture : IDisposable
         Context.SaveChanges();
     }
 
+    // clean up the database after tests are done
     public void Dispose()
     {
         Context.Dispose();

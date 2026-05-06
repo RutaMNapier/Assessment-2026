@@ -9,55 +9,58 @@
 
         <!-- Incoming / Outgoing Toggle -->
         <HorizontalStackLayout Grid.Row="0"
-                               HorizontalOptions="Center"
-                               Padding="10"
-                               Spacing="10">
-            <Button Text="Incoming"
-                    Command="{Binding ToggleViewCommand}"
-                    BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
-                    TextColor="White"
-                    CornerRadius="8"
-                    IsEnabled="{Binding ShowIncoming, Converter={StaticResource InvertedBoolConverter}}" />
-            <Button Text="Outgoing"
-                    Command="{Binding ToggleViewCommand}"
-                    BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
-                    TextColor="White"
-                    CornerRadius="8"
-                    IsEnabled="{Binding ShowIncoming}" />
+            HorizontalOptions="Center"
+            Padding="10"
+            Spacing="10">
+
+            <Button 
+                Text="Incoming"
+                Command="{Binding ToggleViewCommand}"
+                BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                TextColor="White"
+                CornerRadius="8"
+                IsEnabled="{Binding ShowIncoming, Converter={StaticResource InvertedBoolConverter}}" />
+
+            <Button 
+                Text="Outgoing"
+                Command="{Binding ToggleViewCommand}"
+                BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                TextColor="White"
+                CornerRadius="8"
+                IsEnabled="{Binding ShowIncoming}" />
         </HorizontalStackLayout>
 
         <!-- Loading Indicator -->
         <ActivityIndicator Grid.Row="1"
-                           IsRunning="{Binding IsBusy}"
-                           IsVisible="{Binding IsBusy}"
-                           Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
-                           HorizontalOptions="Center" />
+            IsRunning="{Binding IsBusy}"
+            IsVisible="{Binding IsBusy}"
+            Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+            HorizontalOptions="Center" />
 
         <!-- Error Message -->
-        <Border Grid.Row="1"
-                BackgroundColor="{AppThemeBinding Light=#FFEBEE, Dark=#1B0000}"
-                Stroke="{AppThemeBinding Light=#F44336, Dark=#EF5350}"
-                StrokeThickness="1"
-                Padding="15"
-                Margin="10,5"
-                IsVisible="{Binding ErrorMessage, Converter={StaticResource StringToBoolConverter}}">
+        <Border
+            Grid.Row="1"
+            BackgroundColor="{AppThemeBinding Light=#FFEBEE, Dark=#1B0000}"
+            Stroke="{AppThemeBinding Light=#F44336, Dark=#EF5350}"
+            StrokeThickness="1"
+            Padding="15"
+            Margin="10,5"
+            IsVisible="{Binding ErrorMessage, Converter={StaticResource StringToBoolConverter}}">
             <Border.StrokeShape>
                 <RoundRectangle CornerRadius="8" />
             </Border.StrokeShape>
+
             <Label Text="{Binding ErrorMessage}"
                    TextColor="{AppThemeBinding Light=#D32F2F, Dark=#EF5350}"
                    FontSize="14" />
         </Border>
 
         <!-- Incoming Rentals -->
-        <CollectionView Grid.Row="2"
-                        ItemsSource="{Binding Incoming}"
-                        IsVisible="{Binding ShowIncoming}">
+        <CollectionView Grid.Row="2" ItemsSource="{Binding Incoming}" IsVisible="{Binding ShowIncoming}">
 
             <CollectionView.EmptyView>
                 <VerticalStackLayout Padding="20" VerticalOptions="Center">
-                    <Label FontSize="48"
-                           HorizontalOptions="Center" />
+                    <Label FontSize="48" HorizontalOptions="Center" />
                     <Label Text="No incoming rentals"
                            FontSize="20"
                            FontAttributes="Bold"
@@ -76,9 +79,11 @@
                             Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray700}}"
                             StrokeThickness="1"
                             BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}">
+
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="8" />
                         </Border.StrokeShape>
+
                         <Grid ColumnDefinitions="*,Auto">
                             <VerticalStackLayout Grid.Column="0" Spacing="4">
                                 <Label Text="{Binding ItemTitle}"
@@ -92,18 +97,22 @@
                                        FontSize="12"
                                        TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray500}}" />
                             </VerticalStackLayout>
+
                             <Border Grid.Column="1"
                                     Padding="8,4"
                                     VerticalOptions="Center"
                                     BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}">
+
                                 <Border.StrokeShape>
                                     <RoundRectangle CornerRadius="4" />
                                 </Border.StrokeShape>
+
                                 <Label Text="{Binding Status}"
                                        TextColor="White"
                                        FontSize="12"
                                        FontAttributes="Bold" />
                             </Border>
+
                         </Grid>
                     </Border>
                 </DataTemplate>
@@ -112,15 +121,12 @@
         </CollectionView>
 
         <!-- Outgoing Rentals -->
-        <CollectionView Grid.Row="2"
-                        ItemsSource="{Binding Outgoing}"
-                        IsVisible="{Binding ShowIncoming, Converter={StaticResource InvertedBoolConverter}}">
+        <CollectionView Grid.Row="2" ItemsSource="{Binding Outgoing}"
+            IsVisible="{Binding ShowIncoming, Converter={StaticResource InvertedBoolConverter}}">
 
             <CollectionView.EmptyView>
                 <VerticalStackLayout Padding="20" VerticalOptions="Center">
-                    <Label Text="🔍"
-                           FontSize="48"
-                           HorizontalOptions="Center" />
+                    <Label FontSize="48" HorizontalOptions="Center" />
                     <Label Text="No outgoing rentals"
                            FontSize="20"
                            FontAttributes="Bold"
@@ -155,10 +161,12 @@
                                        FontSize="12"
                                        TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray500}}" />
                             </VerticalStackLayout>
+
                             <Border Grid.Column="1"
                                     Padding="8,4"
                                     VerticalOptions="Center"
                                     BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}">
+
                                 <Border.StrokeShape>
                                     <RoundRectangle CornerRadius="4" />
                                 </Border.StrokeShape>
@@ -167,6 +175,7 @@
                                        FontSize="12"
                                        FontAttributes="Bold" />
                             </Border>
+                            
                         </Grid>
                     </Border>
                 </DataTemplate>

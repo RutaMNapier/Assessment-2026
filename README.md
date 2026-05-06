@@ -6,18 +6,18 @@ nav_order: 5
 mermaid: true
 ---
 
-# StarterApp
+# RentalApp — Library of Things
 
-The purpose of this app is to act as a starting point for further development. It provides some
-basic features including:
+A peer-to-peer rental marketplace built with .NET MAUI, extending the StarterApp for SET09102.
+Community members can list items for rent, discover items and request rentals.
 
-* Database integration and migrations
-* Role-based security
-* Local authentication
-* Example navigation
+The app provides all StarterApp features plus:
+* REST API integration with JWT authentication
+* Item listing and browsing
+* Rental request workflow
+* Incoming and outgoing rental viewing
 
-This version of the app uses PostgreSQL for data storage and Entity Framework Core for object-relational mapping
-and migrations.
+This version connects to a shared REST API backend.
 
 To fully understand how it works, you should follow an appropriate set of tutorials such as 
 [this one](https://edinburgh-napier.github.io/SET09102/tutorials/csharp/) which covers all of the main
@@ -41,6 +41,7 @@ This app is built using the following tool versions.
 |-------------------------------------------------------------------------------------------|-------------|
 | [.NET](https://dotnet.microsoft.com/en-us/)                                               | 8.0 / 9.0   |
 | [PostgreSQL Docker image](https://hub.docker.com/_/postgres)                              | 16          |
+| [.NET MAUI](https://dotnet.microsoft.com/en-us/apps/maui)                                 | 10.0        |
 
 
 ## Getting started
@@ -52,6 +53,7 @@ Before using this app, ensure you have:
 1. **.NET SDK 8.0** or later installed
 2. **Docker** installed and running
 3. **PostgreSQL container** running (see [dev-environment tutorial](https://edinburgh-napier.github.io/SET09102/tutorials/csharp/dev-environment/))
+4. **Android emulator** running
 
 ### Configuration
 
@@ -81,9 +83,22 @@ Before using this app, ensure you have:
 3. Build and run the application:
    ```bash
    cd ../StarterApp
-   dotnet build
-   dotnet run
+   dotnet clean
+   dotnet build RentalApp/RentalApp.csproj -f net10.0-android -c Debug
    ```
+
+ 4. Install on emulator:
+   ```cmd
+   adb uninstall com.companyname.starterapp
+   adb install RentalApp\bin\Debug\net10.0-android\com.companyname.starterapp-Signed.apk
+   adb shell monkey -p com.companyname.starterapp 1
+   ```  
+
+### Running Tests
+
+```bash
+dotnet test RentalApp.Test/RentalApp.Test.csproj --verbosity normal
+```
 
 ### Tutorial
 

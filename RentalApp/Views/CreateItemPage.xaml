@@ -17,6 +17,7 @@
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="8" />
                 </Border.StrokeShape>
+                
                 <Label Text="{Binding ErrorMessage}"
                        TextColor="{AppThemeBinding Light=#D32F2F, Dark=#EF5350}"
                        FontSize="14" />
@@ -30,6 +31,7 @@
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="8" />
                 </Border.StrokeShape>
+
                 <Entry Text="{Binding Title}"
                        Placeholder="e.g. Electric Drill"
                        Margin="10" />
@@ -43,6 +45,7 @@
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="8" />
                 </Border.StrokeShape>
+
                 <Editor Text="{Binding Description}"
                         Placeholder="Describe your item..."
                         HeightRequest="100"
@@ -57,7 +60,8 @@
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="8" />
                 </Border.StrokeShape>
-                <Entry Text="{Binding DailyRate}"
+
+                <Entry Text="{Binding DailyRateText}"
                        Placeholder="0.00"
                        Keyboard="Numeric"
                        Margin="10" />
@@ -71,6 +75,7 @@
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="8" />
                 </Border.StrokeShape>
+
                 <Picker ItemsSource="{Binding Categories}"
                         ItemDisplayBinding="{Binding Name}"
                         SelectedItem="{Binding SelectedCategory}"
