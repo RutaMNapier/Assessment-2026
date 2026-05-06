@@ -1,3 +1,4 @@
+using Xunit;
 using Microsoft.EntityFrameworkCore;
 using RentalApp.Database.Data;
 using RentalApp.Database.Models;
@@ -11,8 +12,9 @@ public class DatabaseFixture : IDisposable
 
     public DatabaseFixture()
     {
+        // unique name per instance prevents shared state between test classes
         var options = new DbContextOptionsBuilder<AppDbContext>()
-            .UseInMemoryDatabase("TestDatabase")
+            .UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options;
 
         Context = new AppDbContext(options);

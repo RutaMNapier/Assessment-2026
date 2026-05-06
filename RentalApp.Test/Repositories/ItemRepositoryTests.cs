@@ -1,3 +1,4 @@
+using Xunit;
 using RentalApp.Database.Data.Repositories;
 using RentalApp.Database.Models;
 using RentalApp.Test.Fixtures;
@@ -5,10 +6,11 @@ using RentalApp.Test.Fixtures;
 namespace RentalApp.Test.Repositories;
 
 // tests for ItemRepository using InMemory database
+// matches tutorial DatabaseFixture pattern
 public class ItemRepositoryTests : IClassFixture<DatabaseFixture>
 {
     private readonly DatabaseFixture _fixture;
-    private readonly ItemRepository _repository;
+    private readonly ItemRepository  _repository;
 
     public ItemRepositoryTests(DatabaseFixture fixture)
     {
