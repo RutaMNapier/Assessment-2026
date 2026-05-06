@@ -1,37 +1,19 @@
-using Moq;
 using RentalApp.Database.Data.Repositories;
 using RentalApp.Database.Models;
 using RentalApp.Test.Fixtures;
 
 namespace RentalApp.Test.Repositories;
 
-// tests for IItemRepository
-// uses Moq and DatabaseFixture seed data
+// tests for ItemRepository using InMemory database
 public class ItemRepositoryTests : IClassFixture<DatabaseFixture>
 {
     private readonly DatabaseFixture _fixture;
-    private readonly Mock<IItemRepository> _repoMock;
+    private readonly ItemRepository _repository;
 
     public ItemRepositoryTests(DatabaseFixture fixture)
     {
-        _fixture  = fixture;
-        _repoMock = new Mock<IItemRepository>();
-
-        _repoMock.Setup(r => r.GetAllAsync())
-                 .ReturnsAsync(_fixture.Context.Items.ToList());
-
-        _repoMock.Setup(r => r.GetByIdAsync(1))
-                 .ReturnsAsync(_fixture.Context.Items.First());
-
-        _repoMock.Setup(r => r.GetByIdAsync(999))
-                 .ReturnsAsync((Item?)null);
-
-        _repoMock.Setup(r => r.CreateAsync(It.IsAny<Item>()))
-                 .ReturnsAsync((Item item) =>
-                 {
-                     item.Id = _fixture.Context.Items.Count() + 1;
-                     return item;
-                 });
+        _fixture    = fixture;
+        _repository = new ItemRepository(_fixture.Context);
     }
 
     [Fact]
@@ -40,7 +22,7 @@ public class ItemRepositoryTests : IClassFixture<DatabaseFixture>
         // Arrange - data seeded in fixture
 
         // Act
-        var items = await _repoMock.Object.GetAllAsync();
+        var items = await _repository.GetAllAsync();
 
         // Assert
         Assert.NotNull(items);
@@ -54,7 +36,7 @@ public class ItemRepositoryTests : IClassFixture<DatabaseFixture>
         var expectedId = 1;
 
         // Act
-        var item = await _repoMock.Object.GetByIdAsync(expectedId);
+        var item = await _repository.GetByIdAsync(expectedId);
 
         // Assert
         Assert.NotNull(item);
@@ -69,14 +51,14 @@ public class ItemRepositoryTests : IClassFixture<DatabaseFixture>
         var invalidId = 999;
 
         // Act
-        var item = await _repoMock.Object.GetByIdAsync(invalidId);
+        var item = await _repository.GetByIdAsync(invalidId);
 
         // Assert
         Assert.Null(item);
     }
 
     [Fact]
-    public async Task CreateAsync_ValidItem_ShouldReturnItemWithId()
+    public async Task CreateAsync_ValidItem_ShouldAddToDatabase()
     {
         // Arrange
         var newItem = new Item
@@ -89,11 +71,11 @@ public class ItemRepositoryTests : IClassFixture<DatabaseFixture>
         };
 
         // Act
-        var created = await _repoMock.Object.CreateAsync(newItem);
+        var created = await _repository.CreateAsync(newItem);
 
         // Assert
         Assert.NotNull(created);
-        Assert.Equal("Camping Tent", created.Title);
         Assert.NotEqual(0, created.Id);
+        Assert.Equal("Camping Tent", created.Title);
     }
 }

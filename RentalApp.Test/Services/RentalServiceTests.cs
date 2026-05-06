@@ -7,7 +7,6 @@ using RentalApp.Test.Fixtures;
 namespace RentalApp.Test.Services;
 
 // tests for RentalService business logic
-// uses Moq to mock repositories
 public class RentalServiceTests : IClassFixture<DatabaseFixture>
 {
     private readonly Mock<IRentalRepository> _rentalRepoMock;
